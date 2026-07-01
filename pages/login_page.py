@@ -1,15 +1,22 @@
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
+from core.base_page import BasePage
+from locators.login_locators import LoginLocators
 
 class LoginPage(BasePage):
 
-    USERNAME = (By.ID, "user-name")
-    PASSWORD = (By.ID, "password")
-    LOGIN_BUTTON = (By.ID, "login-button")
-
     def login(self, username, password):
-        self.type(self.USERNAME, username)
 
-        self.type(self.PASSWORD, password)
+        self.logger.info("Logging into the application")
 
-        self.click(self.LOGIN_BUTTON)
+        self.type(LoginLocators.USERNAME, username)
+        self.type(LoginLocators.PASSWORD, password)
+        self.click(LoginLocators.LOGIN_BUTTON)
+    
+    def get_error_message(self):
+        return self.get_text(LoginLocators.ERROR_MESSAGE)
+
+    def is_login_button_visible(self):
+        return self.is_element_visible(LoginLocators.LOGIN_BUTTON)
+
+    def is_login_page_loaded(self):
+        return self.is_element_visible(LoginLocators.USERNAME) and self.is_element_visible(LoginLocators.PASSWORD) and self.is_element_visible(LoginLocators.LOGIN_BUTTON)

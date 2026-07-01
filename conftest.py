@@ -1,12 +1,13 @@
 import outcome
 import pytest
-from utils.driver_factory import DriverFactory
+from config.settings import BROWSER
+from core.driver_factory import DriverFactory
 from datetime import datetime
 
 @pytest.fixture
 def driver():
 
-    driver = DriverFactory.get_driver()
+    driver = DriverFactory.get_driver(BROWSER)
     yield driver
     driver.quit()
 
