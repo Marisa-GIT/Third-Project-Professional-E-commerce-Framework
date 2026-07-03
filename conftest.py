@@ -1,13 +1,18 @@
+import os
+
 import outcome
 import pytest
-from config.settings import BROWSER
+from config.settings import BASE_URL, BROWSER
 from core.driver_factory import DriverFactory
 from datetime import datetime
 
 @pytest.fixture
 def driver():
 
+    """Creates and disposes the WebDriver instance."""
+
     driver = DriverFactory.get_driver(BROWSER)
+    driver.get(BASE_URL)
     yield driver
     driver.quit()
 
@@ -27,6 +32,8 @@ def pytest_runtest_makereport(
         "%Y%m%d_%H%M%S"
         )
         
+        os.makedirs("screenshots", exist_ok=True)
+
         driver.save_screenshot(
-        f"screenshots/{timestamp}.png"
+        f"screenshots/{item.name}_{timestamp}.png"
         )
