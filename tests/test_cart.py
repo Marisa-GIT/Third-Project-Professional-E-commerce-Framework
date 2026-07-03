@@ -1,11 +1,9 @@
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
-from config.settings import BASE_URL
+
 
 def test_add_product_to_cart(driver):
-
-    driver.get(BASE_URL)
 
     login = LoginPage(driver)
 
