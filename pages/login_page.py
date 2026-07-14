@@ -4,6 +4,13 @@ from locators.login_locators import LoginLocators
 from pages.inventory_page import InventoryPage
 
 class LoginPage(BasePage):
+    
+    def is_loaded(self):
+        return (
+            self.is_visible(LoginLocators.USERNAME)
+            and self.is_visible(LoginLocators.PASSWORD)
+            and self.is_visible(LoginLocators.LOGIN_BUTTON)
+        )
 
     def login(self, username, password):
 
@@ -19,9 +26,9 @@ class LoginPage(BasePage):
         return self.get_text(LoginLocators.ERROR_MESSAGE)
 
     def is_login_button_visible(self):
-        return self.is_element_visible(LoginLocators.LOGIN_BUTTON)
+        return self.is_visible(LoginLocators.LOGIN_BUTTON)
 
     def is_login_page_loaded(self):
-        return self.is_element_visible(LoginLocators.USERNAME) and self.is_element_visible(LoginLocators.PASSWORD) and self.is_element_visible(LoginLocators.LOGIN_BUTTON)
+        return self.is_visible(LoginLocators.USERNAME) and self.is_visible(LoginLocators.PASSWORD) and self.is_element_visible(LoginLocators.LOGIN_BUTTON)
     
     
