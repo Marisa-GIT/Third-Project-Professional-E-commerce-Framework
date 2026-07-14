@@ -1,18 +1,17 @@
-from config.credentials import PASSWORD, USERNAME
-from core.base_page import BasePage
+from utils.test_data_manager import TestDataManager
 from pages.login_page import LoginPage
-from pages.inventory_page import InventoryPage
-from pages.cart_page import CartPage
-from config.settings import BASE_URL
 from selenium.webdriver.common.by import By
 
-class CartPage(BasePage):
+class TestCart:
+     
      def test_add_product_to_cart(self, driver):
         login_page = LoginPage(driver)
 
+        user = TestDataManager.get_user("standard_user")
+
         inventory_page = login_page.login(
-            USERNAME,
-            PASSWORD
+            user["username"],
+            user["password"]
         )
 
         inventory_page.add_product_to_cart(

@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from config.settings import DEFAULT_TIMEOUT
 from core.logger import Logger
+from locators.checkout_information_locators import CheckoutInformationLocators
 
 class BasePage:
     def __init__(self, driver):
@@ -74,10 +75,8 @@ class BasePage:
 
     def select_by_visible_text(self, locator, text):
         self.logger.debug(f"Selecting '{text}' from dropdown {locator}")
-        element = self._find_visible(locator)
-        select = Select(element)
-        select.select_by_visible_text(text) 
-    
+        Select(self._find_visible(locator)).select_by_visible_text(text)
+            
     def wait_for_title(self, title_text, timeout=10):
         self.logger.debug(f"Waiting for title to be '{title_text}'")
         return WebDriverWait(self.driver, timeout).until(
@@ -92,15 +91,40 @@ class BasePage:
     def get_title(self):
         self.logger.debug("Getting page title")
         return self.driver.title
+    
+    def get_text_from_elements(self, locator):
+        self.logger.debug(f"Getting text from elements located by {locator}")
+        elements = self.wait.until(EC.visibility_of_all_elements_located(locator))
+        return [element.text for element in elements]
+    
+    def get_element_count(self, locator):
+        elements = self.wait.until(
+            EC.presence_of_all_elements_located(locator)
+        )
+        return len(elements)
+    
+    def get_elements(self, locator):
+        return self.driver.find_elements(*locator)
 
     def get_current_url(self):
         self.logger.debug("Getting current URL")
         return self.driver.current_url
     
-    def select_by_visible_text(self, locator, text):
-        self.logger.debug(f"Selecting '{text}' from dropdown {locator}")
-        element = self.find_visible(locator)
-        Select(element).select_by_visible_text(text) 
+    def submit_information(self) -> None:
+        self.logger.info("Submitting checkout information")
+        self.click(CheckoutInformationLocators.CONTINUE_BUTTON)
+    
+    def wait_for_url_contains(self, url_fragment, timeout=10):
+        try:
+            return WebDriverWait(self.driver, timeout).until(
+                EC.url_contains(url_fragment)
+            )
+        except TimeoutException as error:
+            current_url = self.driver.current_url
+            raise TimeoutException(
+                f"Expected URL containing '{url_fragment}', "
+                f"but current URL is '{current_url}'"
+            ) from error
     
     def _find_visible(self, locator):
         self.logger.debug(f"Waiting for visibility of {locator}")

@@ -1,10 +1,9 @@
 import os
-
-import outcome
 import pytest
 from config.settings import BASE_URL, BROWSER
 from core.driver_factory import DriverFactory
 from datetime import datetime
+
 
 @pytest.fixture
 def driver():
@@ -26,7 +25,9 @@ def pytest_runtest_makereport(
     report = outcome.get_result()
     
     if report.when == "call" and report.failed:
-        driver = item.funcargs["driver"]
+        driver = item.funcargs.get("driver")
+        if driver is None:
+            return
         
         timestamp = datetime.now().strftime(
         "%Y%m%d_%H%M%S"
