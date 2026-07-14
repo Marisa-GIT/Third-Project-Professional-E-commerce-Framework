@@ -43,4 +43,4 @@ class InventoryPage(BasePage):
         self.logger.info("Opening shopping cart")
         cart_icon_locator = InventoryLocators.get_cart_icon_locator()
         self.click(cart_icon_locator)
-        return CartPage(self.driver) 
+        return CartPage(self.driver)
