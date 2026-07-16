@@ -18,27 +18,28 @@ class CheckoutOverviewPage(BasePage):
         product_elements = CheckoutOverviewLocators.PRODUCT_NAMES
         return self.get_text_from_elements(product_elements)
 
-    def get_product_prices(self) -> list[str]:
-        return self.get_text_from_elements(
-            CheckoutOverviewLocators.PRODUCT_PRICES
-        )
+    def get_product_prices(self) -> list[float]:
+        self.logger.info("Getting product names in the checkout overview")
+        price_elements = self.get_elements(CheckoutOverviewLocators.PRODUCT_PRICES)
+        return [float(el.text.replace("$", "")) for el in price_elements]
         
-    def get_item_total(self) -> str:
-        self.logger.info("Getting item total from checkout overview")
-        item_total_locator = CheckoutOverviewLocators.ITEM_TOTAL
-        return self.get_text(item_total_locator)
+    def get_item_total(self) -> float:
+        self.logger.info("Checking the subtotal on the screen")
+        raw_text = self.get_text(CheckoutOverviewLocators.ITEM_TOTAL)
+        return float(raw_text.split("$")[1])
 
-    def get_tax(self) -> str:
+    def get_tax(self) -> float:
         self.logger.info("Getting tax from checkout overview")
-        tax_locator = CheckoutOverviewLocators.TAX
-        return self.get_text(tax_locator)
+        text_element = self.get_text(CheckoutOverviewLocators.TAX)
+        return float(text_element.split("$")[1])
 
-    def get_total(self) -> str:
+    def get_total(self) -> float:
         self.logger.info("Getting total from checkout overview")
-        total_locator = CheckoutOverviewLocators.TOTAL
-        return self.get_text(total_locator)
+        text_element = self.get_text(CheckoutOverviewLocators.TOTAL)
+        return float(text_element.split("$")[1])
     
     def get_product_count(self) -> int:
+        self.logger("Getting number of products from inventory")
         return self.get_element_count(
             CheckoutOverviewLocators.PRODUCT_NAMES
         )
