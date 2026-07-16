@@ -9,6 +9,7 @@ from pages.inventory_page import InventoryPage
         ("problem_user", "secret_sauce")
     ]
 )
+
 def test_login_multiple_users(
     driver,
     username,
@@ -16,9 +17,7 @@ def test_login_multiple_users(
 ):
    
     login = LoginPage(driver)
-    
     login.login(username, password)
     
     inventory = InventoryPage(driver)
-    
     assert inventory.get_page_title() == "Products"
