@@ -5,6 +5,7 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from config.browsers import Browsers
 from config.settings import WINDOW_MAXIMIZED, DISABLE_NOTIFICATIONS
 
+
 class DriverFactory:
 
     @staticmethod
@@ -55,6 +56,7 @@ class DriverFactory:
 
         if DISABLE_NOTIFICATIONS:
             options.set_preference("dom.webnotifications.enabled", False)
+            options.set_preference("network.dns.disableIPv6", False)
 
         return webdriver.Firefox(service=FirefoxService(), options=options)
 

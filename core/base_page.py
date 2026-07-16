@@ -76,6 +76,10 @@ class BasePage:
     def select_by_visible_text(self, locator, text):
         self.logger.debug(f"Selecting '{text}' from dropdown {locator}")
         Select(self._find_visible(locator)).select_by_visible_text(text)
+
+    def select_by_value(self, locator, value):
+        self.logger.debug(f"Selecting value '{value}' from dropdown {locator}")
+        Select(self._find_visible(locator)).select_by_value(value)
             
     def wait_for_title(self, title_text, timeout=10):
         self.logger.debug(f"Waiting for title to be '{title_text}'")
@@ -104,6 +108,9 @@ class BasePage:
         return len(elements)
     
     def get_elements(self, locator):
+        self.wait.until(
+            EC.presence_of_all_elements_located(locator)
+        )
         return self.driver.find_elements(*locator)
 
     def get_current_url(self):
