@@ -1,15 +1,13 @@
 from typing import TYPE_CHECKING
 from core.base_page import BasePage
 from locators.cart_locators import CartLocators
-from pages.Checkout_information_page import CheckoutInformationPage
+from pages.checkout_information_page import CheckoutInformationPage
 
 if TYPE_CHECKING:
     from pages.inventory_page import InventoryPage
 
-
 class CartPage(BasePage):
 
-    
     def is_loaded(self) -> bool:
         return self.is_visible(CartLocators.CART_LIST)
     

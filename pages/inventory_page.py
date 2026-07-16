@@ -1,7 +1,9 @@
+
 from selenium.webdriver.common.by import By
 from core.base_page import BasePage
 from locators.inventory_locators import InventoryLocators
 from pages.cart_page import CartPage
+
 
 class InventoryPage(BasePage):
 
@@ -28,10 +30,28 @@ class InventoryPage(BasePage):
     def get_product_price(self, product_name) -> str:
         product_price_locator = InventoryLocators.get_product_price_locator(product_name)
         return self.get_text(product_price_locator)
+    
+    def get_all_product_prices(self) -> list[float]:
+        prices_locator = InventoryLocators.get_all_product_prices_locator()
+        elements = self.get_elements(prices_locator)
+        return [float(el.text.replace("$", "")) for el in elements]
 
     def get_product_name(self, product_name) -> str:
         product_name_locator = InventoryLocators.get_product_name_locator(product_name)
         return self.get_text(product_name_locator)
+    
+    def get_all_product_names(self) -> list[str]:
+        names_locator = InventoryLocators.get_all_product_names_locator()
+        elements = self.get_elements(names_locator)
+        return [el.text for el in elements]
+    
+    def select_sort_option(self, option_value: str):
+        self.logger.info(f"Selecting sort option: {option_value}")
+
+        dropdown_locator = InventoryLocators.get_sort_dropdown_locator()
+
+        self.select_by_value(dropdown_locator, option_value)
+  
 
     def get_cart_badge_count(self) -> int:
         cart_badge_locator = InventoryLocators.get_cart_badge_locator()

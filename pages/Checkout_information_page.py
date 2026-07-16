@@ -16,6 +16,7 @@ class CheckoutInformationPage(BasePage):
         return (
             self.is_visible(CheckoutInformationLocators.FIRST_NAME)
             and self.is_visible(CheckoutInformationLocators.LAST_NAME)
+            and self.is_visible(CheckoutInformationLocators.POSTAL_CODE)
             and self.is_visible(CheckoutInformationLocators.CONTINUE_BUTTON)
         )
     
@@ -49,6 +50,7 @@ class CheckoutInformationPage(BasePage):
     def submit_information(self) -> None:
         self.logger.info("Submitting checkout information")
         self.click(CheckoutInformationLocators.CONTINUE_BUTTON)
+        return CheckoutOverviewPage(self.driver)
 
 
     def cancel(self) -> "CartPage":
