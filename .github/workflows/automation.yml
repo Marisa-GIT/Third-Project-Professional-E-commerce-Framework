@@ -39,4 +39,4 @@ jobs:
           CI: true
           BROWSER: edge
         run: |
-          pytest -v
+          pytest --reruns 2 --only-reruns ReadTimeoutError
