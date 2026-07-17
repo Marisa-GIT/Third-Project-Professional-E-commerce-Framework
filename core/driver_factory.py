@@ -1,3 +1,4 @@
+from requests import options
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
@@ -5,7 +6,10 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from config.browsers import Browsers
 from config.settings import WINDOW_MAXIMIZED, DISABLE_NOTIFICATIONS
 
+import os
 
+if os.getenv("CI") == "true":
+    options.add_argument("--headless=new")
 class DriverFactory:
 
     @staticmethod

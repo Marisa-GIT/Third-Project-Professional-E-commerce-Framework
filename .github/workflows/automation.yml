@@ -36,6 +36,7 @@ jobs:
 
       - name: Run tests
         env:
+          CI: true
           BROWSER: edge
         run: |
           pytest -v
