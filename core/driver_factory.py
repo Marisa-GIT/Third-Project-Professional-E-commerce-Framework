@@ -22,6 +22,7 @@ class DriverFactory:
 
         driver = driver_creator()
 
+        # Mantiene la ventana maximizada en local, pero no interfiere con el entorno CI
         if WINDOW_MAXIMIZED and not os.getenv("CI") == "true":
             driver.maximize_window()
 
@@ -32,10 +33,13 @@ class DriverFactory:
         if DISABLE_NOTIFICATIONS:
             options.add_argument("--disable-notifications")
         
+        
         if os.getenv("CI") == "true":
             options.add_argument("--headless=new")
+            options.add_argument("--no-sandbox")                  
+            options.add_argument("--disable-dev-shm-usage")       
             options.add_argument("--disable-gpu")  
-            options.add_argument("--window-size=1920,1080")
+            options.add_argument("--window-size=1920,1080")       
 
         options.add_experimental_option(
             "prefs",
@@ -65,6 +69,8 @@ class DriverFactory:
         
         if os.getenv("CI") == "true":
             options.add_argument("--headless")
+            options.add_argument("--width=1920")
+            options.add_argument("--height=1080")
 
         return webdriver.Firefox(service=FirefoxService(), options=options)
 
