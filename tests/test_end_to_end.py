@@ -12,7 +12,9 @@ class TestCheckout:
             user["password"]
         )
 
-        inventory_page.add_product_to_cart("Sauce Labs Backpack")
+        product = TestDataManager.get_product("backpack")
+
+        inventory_page.add_product_to_cart(product["name"])
 
         cart_page = inventory_page.open_cart()
         assert cart_page.is_loaded()
@@ -43,9 +45,11 @@ class TestCheckout:
             user["username"],
             user["password"]
         )
-        inventory_page.add_product_to_cart("Sauce Labs Fleece Jacket")
-        inventory_page.add_product_to_cart("Sauce Labs Onesie")
-        inventory_page.add_product_to_cart("Sauce Labs Bolt T-Shirt")
+
+        products_to_purchanse = TestDataManager.get_specific_products(["fleece_jacket", "labs_onesie", "bolt_tshirt"]) 
+        
+        for product in products_to_purchanse:
+            inventory_page.add_product_to_cart(product["name"])
 
         cart_page = inventory_page.open_cart()
         assert cart_page.is_loaded()
