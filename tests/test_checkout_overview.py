@@ -13,8 +13,13 @@ class TestCheckoutOverview:
             user["password"]
         )
 
-        inventory_page.add_product_to_cart("Sauce Labs Backpack")
-        inventory_page.add_product_to_cart("Sauce Labs Bike Light")
+        product = TestDataManager.get_product("bike_light")
+
+        inventory_page.add_product_to_cart(product["name"])
+
+        product = TestDataManager.get_product("backpack")
+
+        inventory_page.add_product_to_cart(product["name"])
 
         cart_page = inventory_page.open_cart()
 

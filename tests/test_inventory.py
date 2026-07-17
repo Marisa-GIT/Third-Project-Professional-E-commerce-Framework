@@ -1,7 +1,6 @@
 import pytest
 from pages.login_page import LoginPage
 from utils.test_data_manager import TestDataManager
-
 class TestInventory:
     
     @pytest.fixture(autouse=True)
@@ -38,11 +37,16 @@ class TestInventory:
 
         assert self.inventory.get_cart_badge_count() == 0, "El carrito no inició en 0"
 
-        self.inventory.add_product_to_cart("Sauce Labs Backpack")
+        product_1 = TestDataManager.get_product("backpack")
+        
+        self.inventory.add_product_to_cart(product_1["name"])
         assert self.inventory.get_cart_badge_count() == 1, "El contador del carrito no subió a 1"
 
-        self.inventory.add_product_to_cart("Sauce Labs Bike Light")
+        product_2 = TestDataManager.get_product("bike_light")
+
+        self.inventory.add_product_to_cart(product_2["name"])
         assert self.inventory.get_cart_badge_count() == 2, "El contador del carrito no subió a 2"
+
 
 
 

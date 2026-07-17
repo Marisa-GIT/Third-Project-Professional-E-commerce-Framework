@@ -12,11 +12,10 @@ class TestCart:
             user["username"],
             user["password"]
         )
+        product = TestDataManager.get_product("backpack")
 
-        inventory_page.add_product_to_cart(
-            "Sauce Labs Backpack"
-        )
-
+        inventory_page.add_product_to_cart(product["name"])
+        
         assert inventory_page.get_cart_badge_count() == 1
 
 
@@ -29,9 +28,10 @@ class TestCart:
             user["password"]
         )
 
-        inventory_page.add_product_to_cart("Sauce Labs Backpack")
-        inventory_page.add_product_to_cart("Sauce Labs Bike Light")
-        inventory_page.add_product_to_cart("Sauce Labs Onesie")
+        products_to_purchanse = TestDataManager.get_specific_products(["backpack", "bike_light", "labs_onesie"]) 
+
+        for product in products_to_purchanse:
+            inventory_page.add_product_to_cart(product["name"])
 
         cart_page = inventory_page.open_cart()
 
@@ -51,10 +51,14 @@ class TestCart:
             user["password"]
         )
 
-        inventory_page.add_product_to_cart("Sauce Labs Backpack")
+        product = TestDataManager.get_product("backpack")
+
+        inventory_page.add_product_to_cart(product["name"])
         assert inventory_page.get_cart_badge_count() == 1
 
-        inventory_page.add_product_to_cart("Sauce Labs Bike Light")
+        product = TestDataManager.get_product("bike_light")
+
+        inventory_page.add_product_to_cart(product["name"])
         assert inventory_page.get_cart_badge_count() == 2
     
      def test_cart_badge_lifecycle(self, driver):
@@ -66,13 +70,17 @@ class TestCart:
                 user["password"]
             )
          
-         inventory_page.add_product_to_cart("Sauce Labs Backpack")
+         product = TestDataManager.get_product("backpack")
+
+         inventory_page.add_product_to_cart(product["name"])
          assert inventory_page.get_cart_badge_count() == 1
 
-         inventory_page.add_product_to_cart("Sauce Labs Bike Light")
+         product = TestDataManager.get_product("bike_light")
+
+         inventory_page.add_product_to_cart(product["name"])
          assert inventory_page.get_cart_badge_count() == 2
 
-         inventory_page.remove_product("Sauce Labs Backpack")
+         inventory_page.remove_product(product["name"])
          assert inventory_page.get_cart_badge_count() == 1
 
 
