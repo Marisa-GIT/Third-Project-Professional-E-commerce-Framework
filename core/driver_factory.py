@@ -8,8 +8,6 @@ from config.settings import WINDOW_MAXIMIZED, DISABLE_NOTIFICATIONS
 
 import os
 
-if os.getenv("CI") == "true":
-    options.add_argument("--headless=new")
 class DriverFactory:
 
     @staticmethod
@@ -26,7 +24,7 @@ class DriverFactory:
 
         driver = driver_creator()
 
-        if WINDOW_MAXIMIZED:
+        if WINDOW_MAXIMIZED and not os.getenv("CI") == "true":
             driver.maximize_window()
 
         return driver
@@ -35,6 +33,11 @@ class DriverFactory:
     def _configure_chromium_options(options):
         if DISABLE_NOTIFICATIONS:
             options.add_argument("--disable-notifications")
+        
+        if os.getenv("CI") == "true":
+            options.add_argument("--headless=new")
+            options.add_argument("--disable-gpu")  
+            options.add_argument("--window-size=1920,1080")
 
         options.add_experimental_option(
             "prefs",
@@ -61,6 +64,9 @@ class DriverFactory:
         if DISABLE_NOTIFICATIONS:
             options.set_preference("dom.webnotifications.enabled", False)
             options.set_preference("network.dns.disableIPv6", False)
+        
+        if os.getenv("CI") == "true":
+            options.add_argument("--headless")
 
         return webdriver.Firefox(service=FirefoxService(), options=options)
 
