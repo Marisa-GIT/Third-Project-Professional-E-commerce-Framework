@@ -1,4 +1,5 @@
 from config.browsers import Browsers
+import os
 
 
 BASE_URL = "https://www.saucedemo.com"
@@ -13,4 +14,7 @@ WINDOW_MAXIMIZED = True
 
 DISABLE_NOTIFICATIONS = True
 
-BROWSER = Browsers.EDGE
+BROWSER = os.getenv(
+    "BROWSER",
+    Browsers.EDGE
+)
