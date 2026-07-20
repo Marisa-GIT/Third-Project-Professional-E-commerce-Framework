@@ -54,3 +54,11 @@ jobs:
         with:
           name: framework-logs
           path: logs/
+      
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: allure-results
+          path: allure-results/
