@@ -3,14 +3,8 @@ from pages.login_page import LoginPage
 
 class TestCheckout:
 
-    def test_checkout_first_name_required(self, driver):
-
-        login_page = LoginPage(driver)
-        user = TestDataManager.get_user("standard_user")
-        inventory_page = login_page.login(
-                    user["username"],
-                    user["password"]
-            )
+    def test_checkout_first_name_required(self, login):                   
+        inventory_page = login()
         
         cart_page = inventory_page.open_cart()
 
@@ -19,14 +13,8 @@ class TestCheckout:
 
         assert checkout_info_page.get_error_message() == "Error: First Name is required"
 
-    def test_checkout_last_name_required(self, driver):
-
-        login_page = LoginPage(driver)
-        user = TestDataManager.get_user("standard_user")
-        inventory_page = login_page.login(
-                    user["username"],
-                    user["password"]
-            )
+    def test_checkout_last_name_required(self, login):
+        inventory_page = login()
         
         cart_page = inventory_page.open_cart()
 
@@ -36,14 +24,8 @@ class TestCheckout:
 
         assert checkout_info_page.get_error_message() == "Error: Last Name is required"
 
-    def test_checkout_postal_code_required(self, driver):
-
-        login_page = LoginPage(driver)
-        user = TestDataManager.get_user("standard_user")
-        inventory_page = login_page.login(
-                    user["username"],
-                    user["password"]
-            )
+    def test_checkout_postal_code_required(self, login):
+        inventory_page = login()
         
         cart_page = inventory_page.open_cart()
 
@@ -54,14 +36,8 @@ class TestCheckout:
 
         assert checkout_info_page.get_error_message() == "Error: Postal Code is required"
 
-    def test_cancel_checkout(self, driver):
-
-        login_page = LoginPage(driver)
-        user = TestDataManager.get_user("standard_user")
-        inventory_page = login_page.login(
-                    user["username"],
-                    user["password"]
-            )
+    def test_cancel_checkout(self, driver, login):
+        inventory_page = login()
         
         cart_page = inventory_page.open_cart()
 
@@ -71,29 +47,19 @@ class TestCheckout:
 
         assert "cart.html" in driver.current_url, "No se regresó al carrito al cancelar"
 
-    def test_checkout_summary_and_completion(self, driver):
+    def test_checkout_summary_and_completion(self, login):
+            inventory_page = login()
+         
 
-            login_page = LoginPage(driver)
-            user = TestDataManager.get_user("standard_user")
-            inventory_page = login_page.login(
-                user["username"],
-                user["password"]
-            )
-
-            product = TestDataManager.get_product("bike_light")
-
-            inventory_page.add_product_to_cart(product["name"])
-
-            product = TestDataManager.get_product("backpack")
-
-            inventory_page.add_product_to_cart(product["name"])
+            products_to_purchanse = TestDataManager.get_specific_products(["backpack", "bike_light"]) 
+        
+            for product in products_to_purchanse:
+                inventory_page.add_product_to_cart(product["name"])
 
             cart_page = inventory_page.open_cart()
 
             checkout_info_page = cart_page.checkout()
-            checkout_info_page.fill_first_name("John")
-            checkout_info_page.fill_last_name("Doe")
-            checkout_info_page.fill_postal_code("12345")
+            checkout_info_page.complete_information("Juan", "Pérez", "110111")
 
             overview_page = checkout_info_page.submit_information()
 
