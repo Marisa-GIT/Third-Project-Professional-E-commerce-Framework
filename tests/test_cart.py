@@ -92,6 +92,24 @@ class TestCart:
         success_message = checkout_complete_page.get_complete_header()
         assert success_message == "Thank you for your order!", \
             f"La compra falló o el mensaje es incorrecto. Mensaje obtenido: '{success_message}'"
+        
+    def test_purchase_problem_user(self, login):
+        inventory_page = login("problem_user")
+     
+        product = TestDataManager.get_product("bike_light")
+        inventory_page.add_product_to_cart(product["name"])
+
+        cart_page = inventory_page.open_cart()
+
+        checkout_info_page = cart_page.checkout()
+
+        checkout_info_page.fill_first_name("John")
+        checkout_info_page.fill_last_name("Due")
+        checkout_info_page.fill_postal_code("111076")
+        checkout_info_page.submit_information()
+
+        assert checkout_info_page.get_error_message() == "Error: Last Name is required"
+
 
 
 
