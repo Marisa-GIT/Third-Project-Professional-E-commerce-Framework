@@ -3,14 +3,8 @@ from utils.test_data_manager import TestDataManager
 
 class TestCheckout:
 
-    def test_complete_purchase(self, driver):
-
-        login_page = LoginPage(driver)
-        user = TestDataManager.get_user("standard_user")
-        inventory_page = login_page.login(
-            user["username"],
-            user["password"]
-        )
+    def test_complete_purchase(self, login):
+        inventory_page = login()
 
         product = TestDataManager.get_product("backpack")
 
@@ -27,7 +21,6 @@ class TestCheckout:
             "Perez",
             "111071"
         )
-
         checkout_overview_page = checkout_information_page.submit_information()
         assert checkout_overview_page.is_loaded()
 
@@ -37,14 +30,8 @@ class TestCheckout:
             == "Thank you for your order!"
         )
     
-    def test_purchace_multiple_products(self, driver):
-
-        login_page = LoginPage(driver)
-        user = TestDataManager.get_user("standard_user")
-        inventory_page = login_page.login(
-            user["username"],
-            user["password"]
-        )
+    def test_purchace_multiple_products(self, login):
+        inventory_page = login()
 
         products_to_purchanse = TestDataManager.get_specific_products(["fleece_jacket", "labs_onesie", "bolt_tshirt"]) 
         
