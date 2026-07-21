@@ -23,24 +23,29 @@ class InventoryPage(BasePage):
         return self 
     
     def remove_product(self, product_name) -> "InventoryPage":
+        self.logger.info(f"Removing product '{product_name}' from cart")
         remove_button_locator = InventoryLocators.get_remove_button_locator(product_name)
         self.click(remove_button_locator)
         return self
 
     def get_product_price(self, product_name) -> str:
+        self.logger.info(f"Getting price for product '{product_name}'")
         product_price_locator = InventoryLocators.get_product_price_locator(product_name)
         return self.get_text(product_price_locator)
     
     def get_all_product_prices(self) -> list[float]:
+        self.logger.info("Getting all product prices")
         prices_locator = InventoryLocators.get_all_product_prices_locator()
         elements = self.get_elements(prices_locator)
         return [float(el.text.replace("$", "")) for el in elements]
 
     def get_product_name(self, product_name) -> str:
+        self.logger.info(f"Getting name for product '{product_name}'")
         product_name_locator = InventoryLocators.get_product_name_locator(product_name)
         return self.get_text(product_name_locator)
     
     def get_all_product_names(self) -> list[str]:
+        self.logger.info("Getting all product names")
         names_locator = InventoryLocators.get_all_product_names_locator()
         elements = self.get_elements(names_locator)
         return [el.text for el in elements]
@@ -54,6 +59,7 @@ class InventoryPage(BasePage):
   
 
     def get_cart_badge_count(self) -> int:
+        self.logger.info("Getting cart badge count")
         cart_badge_locator = InventoryLocators.get_cart_badge_locator()
         if self.is_visible(cart_badge_locator):
             return int(self.get_text(cart_badge_locator))
