@@ -126,5 +126,23 @@ class TestCheckout:
 
         assert checkout_info_page.get_error_message() == "Error: Last Name is required"
 
+    def test_purchase_performance_glitch_user(self, login):
+            inventory_page = login("perform_glitch_user")
+    
+            product = TestDataManager.get_product("backpack")
+            inventory_page.add_product_to_cart(product["name"])
+
+            cart_page = inventory_page.open_cart()
+            checkout_info_page = cart_page.checkout()
+            checkout_info_page.complete_information("Juan", "Pérez", "110111")
+            checkout_overview_page = checkout_info_page.submit_information()
+            checkout_complete_page = checkout_overview_page.finish()
+
+            success_message = checkout_complete_page.get_complete_header()
+            assert success_message == "Thank you for your order!", \
+                f"La compra falló o el mensaje es incorrecto. Mensaje obtenido: '{success_message}'"
+
+
+
 
 
