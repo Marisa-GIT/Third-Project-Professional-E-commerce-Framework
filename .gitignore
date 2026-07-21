@@ -7,4 +7,6 @@ reports/
 screenshots/
 logs/
 
+*.pyc
+
 *.log
