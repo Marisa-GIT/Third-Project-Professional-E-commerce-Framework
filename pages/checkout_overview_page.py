@@ -39,7 +39,7 @@ class CheckoutOverviewPage(BasePage):
         return float(text_element.split("$")[1])
     
     def get_product_count(self) -> int:
-        self.logger("Getting number of products from inventory")
+        self.logger.info("Getting number of products from inventory")
         return self.get_element_count(
             CheckoutOverviewLocators.PRODUCT_NAMES
         )
