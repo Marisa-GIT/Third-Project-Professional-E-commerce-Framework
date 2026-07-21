@@ -1,5 +1,4 @@
 from utils.test_data_manager import TestDataManager
-from pages.login_page import LoginPage
 
 class TestCheckout:
 
