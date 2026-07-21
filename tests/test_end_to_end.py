@@ -143,6 +143,56 @@ class TestCheckout:
                 f"La compra falló o el mensaje es incorrecto. Mensaje obtenido: '{success_message}'"
 
 
+    def test_complete_checkout_flow(self, login):
+        inventory_page = login()
 
+        products_to_purchase = TestDataManager.get_specific_products(
+            [
+                "backpack",
+                "bike_light",
+                "bolt_tshirt"
+            ]
+        )
 
+        expected_names = []
+        for product in products_to_purchase:
+            inventory_page.add_product_to_cart(product["name"])
+            expected_names.append(product["name"])
+
+        assert inventory_page.get_cart_badge_count() == len(expected_names)
+
+        cart_page = inventory_page.open_cart()
+        assert cart_page.get_product_count() == len(expected_names)
+
+        product_names = cart_page.get_product_names()
+        for name in expected_names:
+            assert name in product_names
+
+        checkout_info_page = cart_page.checkout()
+        checkout_overview_page = (
+            checkout_info_page
+            .complete_information("Juan", "Pérez", "110111")
+            .submit_information()
+        )
+
+        assert checkout_overview_page.get_product_count() == len(expected_names)
+
+        overview_names = checkout_overview_page.get_product_names()
+        for name in expected_names:
+            assert name in overview_names
+
+        assert checkout_overview_page.get_item_total() > 0
+        assert checkout_overview_page.get_tax() > 0
+
+        expected_total = (
+            checkout_overview_page.get_item_total()
+            + checkout_overview_page.get_tax()
+        )
+        assert checkout_overview_page.get_total() == expected_total
+
+        checkout_complete_page = checkout_overview_page.finish()
+        assert checkout_complete_page.is_loaded()
+        assert checkout_complete_page.get_complete_header() == "Thank you for your order!"
+        assert checkout_complete_page.get_complete_message() == "Your order has been dispatched, and will arrive just as fast as the pony can get there!"
+        
 
